@@ -12,8 +12,7 @@ import std/[strformat, times]
 
 import stuff/[app, utils, draw]
 
-type Color = object
-  r, g, b: uint8
+
 
 const
   numFonts = 3
@@ -23,9 +22,9 @@ const
     ]
   )
   palette = [
-    Color(r:0xf4, g:0x43, b:0x36),
-    Color(r:0x21, g:0x96, b:0xf3),
-    Color(r:0x4c, g:0xaf, b:0x50)
+    ColorRed,
+    ColorGreen,
+    ColorBlue
   ]
 
 ## Either put funcs here or below
@@ -51,11 +50,14 @@ proc init() {.cdecl.} =
     logger: sg.Logger(fn: slog.fn),
   ))
   sdtx.setup(sdtx.Desc(
-    fonts: [
-      sdtx.fontKc854(),
-      sdtx.fontC64(),
-      sdtx.fontOric()
-    ],
+    
+    fonts: get_fonts(@[
+      "kc854","c64", "oric"
+    ]),
+    #[
+    fonts: get_fonts(@[
+      fntKc854, fntC64, fntOric
+    ]),]#
     logger: sdtx.Logger(fn: slog.fn),
   ))
 
@@ -67,6 +69,8 @@ proc frame() {.cdecl.} =
 
   sdtx.canvas(sapp.widthf() * 0.5, sapp.heightf() * 0.5)
   draw_text(&"FPS: {fps:.2f}", 0, 0)
+  sdtx.posX(0)
+  sdtx.posY(2)
   sdtx.origin(3, 3)
   for i in 0..<numFonts:
     let color = palette[i]
