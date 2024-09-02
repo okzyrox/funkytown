@@ -18,7 +18,7 @@
 - [ ] Input
     - [ ] Fix input modules stuff:
         - [ ] Get mouse Input
-        - [ ] Get keyboard Input
+        - [x] Get keyboard Input
         - [ ] Get Joystick Input
         - [ ] Get Gamepad Input
-    - [ ] Add function for input handling/updates
+    - [ ] [semi done] Add function for input handling/updates

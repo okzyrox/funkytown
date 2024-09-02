@@ -3,7 +3,7 @@
 import sokol/app as sapp
 import sokol/debugtext as sdtx
 import sokol/log as slog
-import std/[strformat, times]
+import std/[strformat, times, tables]
 
 import utils
 ##
@@ -31,25 +31,27 @@ type GameApp = object
     frame*: proc(): void {.cdecl.}
     shutdown*: proc(): void {.cdecl.}
 
+    event*: proc(evt:ptr Event): void {.cdecl.}
 
-
-proc new_game_app*(init: proc(): void {.cdecl.}, frame: proc(): void {.cdecl.}, shutdown: proc(): void {.cdecl.}): GameApp =
-    let title = new_value(
-        "Sokol App", 
-        proc(value: string) = 
-            sapp.setWindowTitle(value.cstring)
+proc new_game_app*(init: proc(): void {.cdecl.}, frame: proc(): void {.cdecl.}, shutdown: proc(): void {.cdecl.}, event: proc(evt:ptr Event): void {.cdecl.}): GameApp =
+    var title = new_value(
+        "Sokol App"
     )
+    
+    title.connect(proc(value: string) = sapp.setWindowTitle(value.cstring))
 
-    let icon = new_value(
-        IconDesc(sokol_default: true), 
-        proc(value: IconDesc) = 
-            sapp.setIcon(value)
+    var icon = new_value(
+        IconDesc(sokol_default: true)
     )
+    icon.connect(proc(value: IconDesc) = sapp.setIcon(value))
     let size = (800, 600)
 
-    let fullscreen = new_value(
-        false, 
-        proc(value: bool) = 
+    var fullscreen = new_value(
+        false
+    )
+
+    fullscreen.connect(
+        proc(value: bool): void = 
             if value == false:
                 if sapp.isFullscreen():
                     sapp.toggleFullscreen()
@@ -81,7 +83,9 @@ proc new_game_app*(init: proc(): void {.cdecl.}, frame: proc(): void {.cdecl.}, 
         
         init: init, 
         frame: frame, 
-        shutdown: shutdown
+        shutdown: shutdown,
+
+        event: event
     )
 
 proc new_game_app*(): GameApp =
@@ -102,9 +106,10 @@ proc run*(app: var GameApp) =
         initCb: app.init,
         frameCb: app.frame,
         cleanupCb: app.shutdown,
+        eventCb: app.event,
         width: 1366,
         height: 768,
-        windowTitle: app.window_title.get().cstring,
+        windowTitle: app.window_title.get_value().cstring,
         icon: IconDesc(sokol_default: true),
         logger: sapp.Logger(fn: slog.fn),
     ))
@@ -150,3 +155,5 @@ proc get_fonts*(fontList: seq[string]): array[5, FontDesc] =
         index += 1
     
     return arr
+
+export utils

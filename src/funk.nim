@@ -10,7 +10,7 @@ import sokol/debugtext as sdtx
 import sokol/glue as sglue
 import std/[strformat, times]
 
-import stuff/[app, utils, draw]
+import stuff/[app, draw]
 
 
 
@@ -45,6 +45,20 @@ const
 #var mainApp = new_game_app(init, frame, cleanup)
 var mainApp = new_game_app("funky", 900, 700)
 
+var is_shift_locked = false
+
+proc event(event: ptr sapp.Event) {.cdecl.} =
+  if event.type == eventTypeKeyDown:
+    if event.keyCode == keyCodeEscape:
+      sapp.quit()
+    
+    if event.keyCode == keyCodeH:
+      echo "lets go!"
+    
+    if event.keyCode == keyCodeLeftShift:
+      is_shift_locked = not is_shift_locked
+      sapp.lockMouse(is_shift_locked)
+    
 proc init() {.cdecl.} =
   sg.setup(sg.Desc(
     environment: sglue.environment(),
@@ -96,5 +110,7 @@ proc cleanup() {.cdecl.} =
 mainApp.init = init
 mainApp.frame = frame
 mainApp.shutdown = cleanup
+
+mainApp.event = event
 
 mainApp.run()
