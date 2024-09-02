@@ -15,16 +15,17 @@ import stuff/[app, utils, draw]
 
 
 const
-  numFonts = 3
+  numFonts = 4
   passAction = PassAction(
     colors: [
-      ColorAttachmentAction(loadAction: loadActionClear, clearValue: (0, 0.125, 0.25, 1))
+      ColorAttachmentAction(loadAction: loadActionClear, clearValue: (0, 0, 0, 1))
     ]
   )
   palette = [
     ColorRed,
     ColorGreen,
-    ColorBlue
+    ColorBlue,
+    ColorWhite
   ]
 
 ## Either put funcs here or below
@@ -42,7 +43,7 @@ const
 # ))
 
 #var mainApp = new_game_app(init, frame, cleanup)
-var mainApp = new_game_app()
+var mainApp = new_game_app("funky", 900, 700)
 
 proc init() {.cdecl.} =
   sg.setup(sg.Desc(
@@ -52,7 +53,7 @@ proc init() {.cdecl.} =
   sdtx.setup(sdtx.Desc(
     
     fonts: get_fonts(@[
-      "kc854","c64", "oric"
+      "kc853", "kc854","c64", "oric"
     ]),
     #[
     fonts: get_fonts(@[

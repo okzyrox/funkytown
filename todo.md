@@ -16,10 +16,9 @@
 - [ ] better intg with imgui/nuklear/microui if possible
 
 - [ ] Input
-    - [ ]Fix input modules stuff:
+    - [ ] Fix input modules stuff:
         - [ ] Get mouse Input
         - [ ] Get keyboard Input
         - [ ] Get Joystick Input
         - [ ] Get Gamepad Input
     - [ ] Add function for input handling/updates
-    - [ ] 

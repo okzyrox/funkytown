@@ -1,7 +1,10 @@
 # Adapated from that one open source golf game because sokol as NO documentation
 # and i genuinally couldnt find the variables when looking at the source
 # credits to whoever
-import sokol/app as sapp, sokol/gl, sokol/gfx, sokol/glue
+import sokol/app as sapp
+import sokol/gl
+import sokol/gfx
+import sokol/glue
 
 import std/tables
 

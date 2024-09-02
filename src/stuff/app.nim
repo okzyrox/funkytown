@@ -22,6 +22,11 @@ type GameApp = object
     window_size*: (int, int)
     window_icon*: Value[IconDesc]
 
+    # customizables
+    is_mouse_visible*: Value[bool]
+    is_mouse_locked*: Value[bool]
+    is_fullscreen*: Value[bool]
+
     init*: proc(): void {.cdecl.}
     frame*: proc(): void {.cdecl.}
     shutdown*: proc(): void {.cdecl.}
@@ -29,14 +34,50 @@ type GameApp = object
 
 
 proc new_game_app*(init: proc(): void {.cdecl.}, frame: proc(): void {.cdecl.}, shutdown: proc(): void {.cdecl.}): GameApp =
-    let title = new_value("Sokol App", proc(value: string) = sapp.setWindowTitle(value.cstring))
-    let icon = new_value(IconDesc(sokol_default: true), proc(value: IconDesc) = sapp.setIcon(value))
+    let title = new_value(
+        "Sokol App", 
+        proc(value: string) = 
+            sapp.setWindowTitle(value.cstring)
+    )
+
+    let icon = new_value(
+        IconDesc(sokol_default: true), 
+        proc(value: IconDesc) = 
+            sapp.setIcon(value)
+    )
     let size = (800, 600)
+
+    let fullscreen = new_value(
+        false, 
+        proc(value: bool) = 
+            if value == false:
+                if sapp.isFullscreen():
+                    sapp.toggleFullscreen()
+            elif value == true:
+                if not sapp.isFullscreen():
+                    sapp.toggleFullscreen()
+    )
+
+    let mouse_visible = new_value(
+        true,
+        proc(value: bool) =
+            sapp.showMouse(value)
+    )
+
+    let mouse_locked = new_value(
+        false,
+        proc(value: bool) =
+            sapp.lockMouse(value)
+    )
 
     GameApp(
         window_title: title, 
         window_size: size, 
         window_icon: icon, 
+
+        is_mouse_visible: mouse_visible,
+        is_mouse_locked: mouse_locked,
+        is_fullscreen: fullscreen,
         
         init: init, 
         frame: frame, 
@@ -49,6 +90,12 @@ proc new_game_app*(): GameApp =
 
     GameApp(window_title: title, window_size: size)
 
+
+proc new_game_app*(titlestr: string, width, height: int): GameApp =
+    let title = new_value(titlestr, proc(value: string) = sapp.setWindowTitle(value.cstring))
+    let size = (width, height)
+
+    GameApp(window_title: title, window_size: size)
     
 proc run*(app: var GameApp) =
     sapp.run(sapp.Desc(

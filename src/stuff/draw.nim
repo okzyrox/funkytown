@@ -3,7 +3,6 @@
 
 import sokol/gfx as sg
 import sokol/debugtext as sdtx
-import utils
 
 type Color* = object
   r*, g*, b*: uint8
