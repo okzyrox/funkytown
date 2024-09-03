@@ -5,8 +5,6 @@ import sokol/app as sapp
 import sokol/gfx as sg
 import sokol/debugtext as sdtx
 
-import std/[strformat]
-
 type Color* = object
   r*, g*, b*: uint8
 
@@ -51,7 +49,6 @@ proc draw_text_aligned*(text: string, x, y: float32, aligns: seq[DrawAlignment])
 
     posx = x + xoff
     posy = y + yoff
-    echo &"str: {text}, posx: {posx}, posy: {posy}"
     sdtx.origin(0, 0)
     sdtx.pos(posx, posy)
     sdtx.puts(text.cstring)
