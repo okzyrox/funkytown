@@ -10,6 +10,8 @@
     - [ ] Ideally using something like a json file, or yml to store translations (key value pairs)
     - [ ] Language selection
 
+- Drawing
+    - [x] Add alignment options for drawing text relative to the screen
 
 - [ ] Audio
 

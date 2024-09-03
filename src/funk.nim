@@ -98,6 +98,29 @@ proc frame() {.cdecl.} =
     sdtx.putr("Range Test 1 (xyzbla)", 12)
     sdtx.putr("\nRange Test 2\n", 32)
     sdtx.moveY(2)
+  if is_shift_locked:
+    sdtx.color3b(ColorWhite.r, ColorWhite.g, ColorWhite.b)
+    #draw_text("ShiftLocked", 0, 48)
+    draw_text_aligned("ShiftLocked", 0, 0, @[
+      drawAlignBottom,
+      drawAlignLeft
+    ])
+    draw_text_aligned("Test", 0, -2, @[
+      drawAlignBottom,
+      drawAlignLeft
+    ])
+    draw_text_aligned("Test2", 0, 0, @[
+      drawAlignTop,
+      drawAlignRight
+    ])
+    draw_text_aligned("Test3", 0, 0, @[
+      drawAlignBottom,
+      drawAlignRight
+    ])
+    draw_text_aligned("Test4", 0, 0, @[
+      drawAlignCenterX,
+      drawAlignCenterY
+    ])
   sg.beginPass(Pass(action: passAction, swapchain: sglue.swapchain()))
   sdtx.draw()
   sg.endPass()
